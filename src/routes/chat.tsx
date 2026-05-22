@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { useEffect, useRef, useState } from "react";
-import { Send, Sparkles, Loader2, GraduationCap, BookOpen, Camera, Mic, MicOff, X } from "lucide-react";
+import { Send, Sparkles, Loader2, GraduationCap, BookOpen, Camera, Mic, MicOff, X, NotebookPen } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -48,6 +48,7 @@ function MarkdownView({ text }: { text: string }) {
 function ChatPage() {
   const [grade, setGrade] = useState("10");
   const [subject, setSubject] = useState("Mathematics");
+  const [homework, setHomework] = useState(true);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -78,7 +79,7 @@ function ChatPage() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next, grade, subject, image: sentImage }),
+        body: JSON.stringify({ messages: next, grade, subject, image: sentImage, homework }),
       });
       if (!res.ok || !res.body) {
         const data = await res.json().catch(() => ({}));
