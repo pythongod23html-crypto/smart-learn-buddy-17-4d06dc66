@@ -8,8 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/parent-chat")({
   head: () => ({
     meta: [
-      { title: "Parent Help Desk — EDUassist AI" },
-      { name: "description", content: "Parents can raise requests, ask about fees, leave, and meetings via the EDUassist AI parent help desk." },
+      { title: "Parent Help Desk — EduAssist.AI" },
+      { name: "description", content: "Parents can raise requests, ask about fees, leave, and meetings via the EduAssist.AI parent help desk." },
     ],
   }),
   component: ParentChatPage,

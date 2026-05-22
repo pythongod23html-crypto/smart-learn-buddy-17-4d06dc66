@@ -12,7 +12,7 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full glass">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="EDUassist AI logo" className="h-10 w-10 rounded-xl object-cover shadow-soft" />
+          <img src={logo} alt="EduAssist.AI logo" className="h-10 w-10 rounded-xl object-cover shadow-soft" />
           <span className="text-lg font-bold tracking-tight" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
             EduAssist<span className="text-gradient">.AI</span>
           </span>

@@ -82,7 +82,7 @@ export const Route = createFileRoute("/api/generate")({
           const tool = isQuiz ? QUIZ_TOOL : FLASH_TOOL;
           const fnName = isQuiz ? "create_quiz" : "create_flashcards";
 
-          const system = `You are EDUassist AI, generating CBSE / NCERT-aligned study material for Class ${grade} ${subject}. Adapt difficulty to the grade. Be accurate, age-appropriate, and exam-focused.`;
+          const system = `You are EduAssist.AI, generating CBSE / NCERT-aligned study material for Class ${grade} ${subject}. Adapt difficulty to the grade. Be accurate, age-appropriate, and exam-focused.`;
           const user = isQuiz
             ? `Create a ${n}-question multiple-choice quiz on the topic: "${topic}". Each question must have exactly 4 options, one correct, and a brief explanation.`
             : `Create ${n} concise study flashcards on the topic: "${topic}". Front = term/question, Back = clear definition/answer.`;

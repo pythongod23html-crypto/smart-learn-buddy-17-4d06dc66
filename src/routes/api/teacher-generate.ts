@@ -66,7 +66,7 @@ export const Route = createFileRoute("/api/teacher-generate")({
           const apiKey = process.env.LOVABLE_API_KEY;
           if (!apiKey) return Response.json({ error: "AI not configured." }, { status: 500 });
 
-          const system = `You are EDUassist AI assisting a CBSE teacher. Generate accurate, NCERT-aligned material for Class ${grade} ${subject}. Calibrate difficulty to the grade.`;
+          const system = `You are EduAssist.AI assisting a CBSE teacher. Generate accurate, NCERT-aligned material for Class ${grade} ${subject}. Calibrate difficulty to the grade.`;
           const user = `Teacher request: "${prompt}".\nFormat: ${kind}.\nInclude 5 MCQs, 3 short-answer questions, 2 long-answer questions, a difficulty rating, clear instructions, and a printable answer key.`;
 
           const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {

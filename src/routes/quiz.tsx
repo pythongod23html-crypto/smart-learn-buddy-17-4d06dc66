@@ -6,7 +6,7 @@ import { Loader2, Sparkles, Check, X, RotateCcw, Trophy } from "lucide-react";
 export const Route = createFileRoute("/quiz")({
   head: () => ({
     meta: [
-      { title: "Quiz Generator — EDUassist AI" },
+      { title: "Quiz Generator — EduAssist.AI" },
       { name: "description", content: "Instantly generate CBSE practice quizzes on any topic, for any grade." },
     ],
   }),

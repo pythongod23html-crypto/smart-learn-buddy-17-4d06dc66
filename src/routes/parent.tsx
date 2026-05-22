@@ -69,7 +69,7 @@ function ParentPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2 text-sm">
-                <p className="text-muted-foreground">Your child uses EDUassist AI to ask doubts on school topics, take quizzes, and review flashcards.</p>
+                <p className="text-muted-foreground">Your child uses EduAssist.AI to ask doubts on school topics, take quizzes, and review flashcards.</p>
                 <Link to="/chat" className="inline-flex text-sm font-medium text-primary hover:underline">
                   See what your child is studying →
                 </Link>

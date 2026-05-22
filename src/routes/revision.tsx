@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 export const Route = createFileRoute("/revision")({
   head: () => ({
     meta: [
-      { title: "Smart Revision Generator — EDUassist AI" },
+      { title: "Smart Revision Generator — EduAssist.AI" },
       { name: "description", content: "Paste a chapter or notes and instantly get summaries, flashcards, quizzes, and exam points." },
     ],
   }),
