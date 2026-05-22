@@ -37,19 +37,19 @@ export function Header() {
             aria-label="Toggle theme"
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-input bg-background text-foreground transition hover:bg-accent"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
           </button>
         {session ? (
           <button
             onClick={async () => { await signOut(); navigate({ to: "/" }); }}
-            className="inline-flex items-center justify-center rounded-full border border-input bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-accent"
+            className="inline-flex items-center justify-center rounded-full border border-input bg-background px-4 py-1.5 text-xs font-semibold text-foreground transition hover:bg-accent"
           >
             Sign out
           </button>
         ) : (
           <Link
             to="/login"
-            className="inline-flex items-center justify-center rounded-full gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-elegant transition hover:opacity-95"
+            className="inline-flex items-center justify-center rounded-full gradient-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-elegant transition hover:opacity-95"
           >
             Sign in
           </Link>
