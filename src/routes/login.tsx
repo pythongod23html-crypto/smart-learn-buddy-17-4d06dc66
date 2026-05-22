@@ -40,6 +40,7 @@ function LoginPage() {
       const u = username.trim().toLowerCase();
       if (u.startsWith("p") && /^p\d{10}_ois$/.test(u)) navigate({ to: "/parent" });
       else if (/^\d{10}_ois$/.test(u)) navigate({ to: "/chat" });
+      else if (u.includes("teacher")) navigate({ to: "/teacher" });
       else navigate({ to: "/admin" });
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed");
