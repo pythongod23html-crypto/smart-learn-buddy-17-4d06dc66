@@ -21,6 +21,9 @@ import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AdminSignupRouteImport } from './routes/admin-signup'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTeacherGenerateRouteImport } from './routes/api/teacher-generate'
+import { Route as ApiRevisionRouteImport } from './routes/api/revision'
+import { Route as ApiParentSummaryRouteImport } from './routes/api/parent-summary'
 import { Route as ApiParentChatRouteImport } from './routes/api/parent-chat'
 import { Route as ApiGenerateRouteImport } from './routes/api/generate'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -85,6 +88,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTeacherGenerateRoute = ApiTeacherGenerateRouteImport.update({
+  id: '/api/teacher-generate',
+  path: '/api/teacher-generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRevisionRoute = ApiRevisionRouteImport.update({
+  id: '/api/revision',
+  path: '/api/revision',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiParentSummaryRoute = ApiParentSummaryRouteImport.update({
+  id: '/api/parent-summary',
+  path: '/api/parent-summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiParentChatRoute = ApiParentChatRouteImport.update({
   id: '/api/parent-chat',
   path: '/api/parent-chat',
@@ -117,6 +135,9 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
+  '/api/parent-summary': typeof ApiParentSummaryRoute
+  '/api/revision': typeof ApiRevisionRoute
+  '/api/teacher-generate': typeof ApiTeacherGenerateRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +155,9 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
+  '/api/parent-summary': typeof ApiParentSummaryRoute
+  '/api/revision': typeof ApiRevisionRoute
+  '/api/teacher-generate': typeof ApiTeacherGenerateRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +176,9 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
+  '/api/parent-summary': typeof ApiParentSummaryRoute
+  '/api/revision': typeof ApiRevisionRoute
+  '/api/teacher-generate': typeof ApiTeacherGenerateRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +198,9 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
+    | '/api/parent-summary'
+    | '/api/revision'
+    | '/api/teacher-generate'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +218,9 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
+    | '/api/parent-summary'
+    | '/api/revision'
+    | '/api/teacher-generate'
   id:
     | '__root__'
     | '/'
@@ -205,6 +238,9 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
+    | '/api/parent-summary'
+    | '/api/revision'
+    | '/api/teacher-generate'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,6 +259,9 @@ export interface RootRouteChildren {
   ApiChatRoute: typeof ApiChatRoute
   ApiGenerateRoute: typeof ApiGenerateRoute
   ApiParentChatRoute: typeof ApiParentChatRoute
+  ApiParentSummaryRoute: typeof ApiParentSummaryRoute
+  ApiRevisionRoute: typeof ApiRevisionRoute
+  ApiTeacherGenerateRoute: typeof ApiTeacherGenerateRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -311,6 +350,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/teacher-generate': {
+      id: '/api/teacher-generate'
+      path: '/api/teacher-generate'
+      fullPath: '/api/teacher-generate'
+      preLoaderRoute: typeof ApiTeacherGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/revision': {
+      id: '/api/revision'
+      path: '/api/revision'
+      fullPath: '/api/revision'
+      preLoaderRoute: typeof ApiRevisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/parent-summary': {
+      id: '/api/parent-summary'
+      path: '/api/parent-summary'
+      fullPath: '/api/parent-summary'
+      preLoaderRoute: typeof ApiParentSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/parent-chat': {
       id: '/api/parent-chat'
       path: '/api/parent-chat'
@@ -351,6 +411,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiChatRoute: ApiChatRoute,
   ApiGenerateRoute: ApiGenerateRoute,
   ApiParentChatRoute: ApiParentChatRoute,
+  ApiParentSummaryRoute: ApiParentSummaryRoute,
+  ApiRevisionRoute: ApiRevisionRoute,
+  ApiTeacherGenerateRoute: ApiTeacherGenerateRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
