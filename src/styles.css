@@ -175,9 +175,9 @@
   .shadow-elegant { box-shadow: var(--shadow-elegant); }
   .shadow-soft { box-shadow: var(--shadow-soft); }
   .glass {
-    background: oklch(1 0 0 / 0.7);
+    background: color-mix(in oklab, var(--background) 70%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid oklch(1 0 0 / 0.4);
+    border-bottom: 1px solid var(--border);
   }
 }
