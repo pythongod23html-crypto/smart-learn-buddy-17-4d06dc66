@@ -9,38 +9,301 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as ParentDashboardRouteImport } from './routes/parent-dashboard'
+import { Route as ParentChatRouteImport } from './routes/parent-chat'
+import { Route as ParentRouteImport } from './routes/parent'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as FlashcardsRouteImport } from './routes/flashcards'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ChatRouteImport } from './routes/chat'
+import { Route as AdminSignupRouteImport } from './routes/admin-signup'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiParentChatRouteImport } from './routes/api/parent-chat'
+import { Route as ApiGenerateRouteImport } from './routes/api/generate'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const QuizRoute = QuizRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlannerRoute = PlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentDashboardRoute = ParentDashboardRouteImport.update({
+  id: '/parent-dashboard',
+  path: '/parent-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentChatRoute = ParentChatRouteImport.update({
+  id: '/parent-chat',
+  path: '/parent-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentRoute = ParentRouteImport.update({
+  id: '/parent',
+  path: '/parent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlashcardsRoute = FlashcardsRouteImport.update({
+  id: '/flashcards',
+  path: '/flashcards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSignupRoute = AdminSignupRouteImport.update({
+  id: '/admin-signup',
+  path: '/admin-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiParentChatRoute = ApiParentChatRouteImport.update({
+  id: '/api/parent-chat',
+  path: '/api/parent-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiGenerateRoute = ApiGenerateRouteImport.update({
+  id: '/api/generate',
+  path: '/api/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/admin-signup': typeof AdminSignupRoute
+  '/chat': typeof ChatRoute
+  '/dashboard': typeof DashboardRoute
+  '/flashcards': typeof FlashcardsRoute
+  '/login': typeof LoginRoute
+  '/parent': typeof ParentRoute
+  '/parent-chat': typeof ParentChatRoute
+  '/parent-dashboard': typeof ParentDashboardRoute
+  '/planner': typeof PlannerRoute
+  '/quiz': typeof QuizRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/generate': typeof ApiGenerateRoute
+  '/api/parent-chat': typeof ApiParentChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/admin-signup': typeof AdminSignupRoute
+  '/chat': typeof ChatRoute
+  '/dashboard': typeof DashboardRoute
+  '/flashcards': typeof FlashcardsRoute
+  '/login': typeof LoginRoute
+  '/parent': typeof ParentRoute
+  '/parent-chat': typeof ParentChatRoute
+  '/parent-dashboard': typeof ParentDashboardRoute
+  '/planner': typeof PlannerRoute
+  '/quiz': typeof QuizRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/generate': typeof ApiGenerateRoute
+  '/api/parent-chat': typeof ApiParentChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/admin-signup': typeof AdminSignupRoute
+  '/chat': typeof ChatRoute
+  '/dashboard': typeof DashboardRoute
+  '/flashcards': typeof FlashcardsRoute
+  '/login': typeof LoginRoute
+  '/parent': typeof ParentRoute
+  '/parent-chat': typeof ParentChatRoute
+  '/parent-dashboard': typeof ParentDashboardRoute
+  '/planner': typeof PlannerRoute
+  '/quiz': typeof QuizRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/generate': typeof ApiGenerateRoute
+  '/api/parent-chat': typeof ApiParentChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin-signup'
+    | '/chat'
+    | '/dashboard'
+    | '/flashcards'
+    | '/login'
+    | '/parent'
+    | '/parent-chat'
+    | '/parent-dashboard'
+    | '/planner'
+    | '/quiz'
+    | '/api/chat'
+    | '/api/generate'
+    | '/api/parent-chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/admin-signup'
+    | '/chat'
+    | '/dashboard'
+    | '/flashcards'
+    | '/login'
+    | '/parent'
+    | '/parent-chat'
+    | '/parent-dashboard'
+    | '/planner'
+    | '/quiz'
+    | '/api/chat'
+    | '/api/generate'
+    | '/api/parent-chat'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/admin-signup'
+    | '/chat'
+    | '/dashboard'
+    | '/flashcards'
+    | '/login'
+    | '/parent'
+    | '/parent-chat'
+    | '/parent-dashboard'
+    | '/planner'
+    | '/quiz'
+    | '/api/chat'
+    | '/api/generate'
+    | '/api/parent-chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  AdminSignupRoute: typeof AdminSignupRoute
+  ChatRoute: typeof ChatRoute
+  DashboardRoute: typeof DashboardRoute
+  FlashcardsRoute: typeof FlashcardsRoute
+  LoginRoute: typeof LoginRoute
+  ParentRoute: typeof ParentRoute
+  ParentChatRoute: typeof ParentChatRoute
+  ParentDashboardRoute: typeof ParentDashboardRoute
+  PlannerRoute: typeof PlannerRoute
+  QuizRoute: typeof QuizRoute
+  ApiChatRoute: typeof ApiChatRoute
+  ApiGenerateRoute: typeof ApiGenerateRoute
+  ApiParentChatRoute: typeof ApiParentChatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/quiz': {
+      id: '/quiz'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planner': {
+      id: '/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof PlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-dashboard': {
+      id: '/parent-dashboard'
+      path: '/parent-dashboard'
+      fullPath: '/parent-dashboard'
+      preLoaderRoute: typeof ParentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent-chat': {
+      id: '/parent-chat'
+      path: '/parent-chat'
+      fullPath: '/parent-chat'
+      preLoaderRoute: typeof ParentChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parent': {
+      id: '/parent'
+      path: '/parent'
+      fullPath: '/parent'
+      preLoaderRoute: typeof ParentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flashcards': {
+      id: '/flashcards'
+      path: '/flashcards'
+      fullPath: '/flashcards'
+      preLoaderRoute: typeof FlashcardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-signup': {
+      id: '/admin-signup'
+      path: '/admin-signup'
+      fullPath: '/admin-signup'
+      preLoaderRoute: typeof AdminSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +311,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/parent-chat': {
+      id: '/api/parent-chat'
+      path: '/api/parent-chat'
+      fullPath: '/api/parent-chat'
+      preLoaderRoute: typeof ApiParentChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/generate': {
+      id: '/api/generate'
+      path: '/api/generate'
+      fullPath: '/api/generate'
+      preLoaderRoute: typeof ApiGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  AdminSignupRoute: AdminSignupRoute,
+  ChatRoute: ChatRoute,
+  DashboardRoute: DashboardRoute,
+  FlashcardsRoute: FlashcardsRoute,
+  LoginRoute: LoginRoute,
+  ParentRoute: ParentRoute,
+  ParentChatRoute: ParentChatRoute,
+  ParentDashboardRoute: ParentDashboardRoute,
+  PlannerRoute: PlannerRoute,
+  QuizRoute: QuizRoute,
+  ApiChatRoute: ApiChatRoute,
+  ApiGenerateRoute: ApiGenerateRoute,
+  ApiParentChatRoute: ApiParentChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
