@@ -50,6 +50,16 @@ function LoginPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <div className="mb-4 rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground">
+              <p className="mb-1 font-semibold text-foreground">Demo accounts (password: <code>Demo1234</code>)</p>
+              <ul className="space-y-0.5">
+                <li>Admin: <code>admin_demo</code></li>
+                <li>Teacher: <code>teacher_demo</code></li>
+                <li>Student: <code>1000000001_OIS</code> · Parent: <code>p1000000001_OIS</code></li>
+                <li>Student: <code>1000000002_OIS</code> · Parent: <code>p1000000002_OIS</code></li>
+                <li>Student: <code>1000000003_OIS</code> · Parent: <code>p1000000003_OIS</code></li>
+              </ul>
+            </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
