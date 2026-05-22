@@ -14,7 +14,7 @@ export function Header() {
         <Link to="/" className="flex items-center gap-2">
           <img src={logo} alt="EDUassist AI logo" className="h-10 w-10 rounded-xl object-cover shadow-soft" />
           <span className="text-lg font-bold tracking-tight" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
-            EDUassist <span className="text-gradient">AI</span>
+            EduAssist<span className="text-gradient">.AI</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
