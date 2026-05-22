@@ -74,18 +74,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Orchids EDUassist" },
+      { title: "Orchids EduAssist" },
       { name: "description", content: "This is a chatbot for CBSE students of all grades to get their questions answered perfectly and clearly." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Orchids EDUassist" },
+      { property: "og:title", content: "Orchids EduAssist" },
       { property: "og:description", content: "This is a chatbot for CBSE students of all grades to get their questions answered perfectly and clearly." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Orchids EDUassist" },
+      { name: "twitter:title", content: "Orchids EduAssist" },
       { name: "twitter:description", content: "This is a chatbot for CBSE students of all grades to get their questions answered perfectly and clearly." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/Wbyb5ltc9ecfx1tEVJcd0lmrBnv2/social-images/social-1778651179167-EDUassist.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/Wbyb5ltc9ecfx1tEVJcd0lmrBnv2/social-images/social-1778651179167-EDUassist.webp" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/Wbyb5ltc9ecfx1tEVJcd0lmrBnv2/social-images/social-1778651179167-EduAssist.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/Wbyb5ltc9ecfx1tEVJcd0lmrBnv2/social-images/social-1778651179167-EduAssist.webp" },
     ],
     links: [
       {

@@ -10,7 +10,7 @@ import rehypeKatex from "rehype-katex";
 export const Route = createFileRoute("/chat")({
   head: () => ({
     meta: [
-      { title: "AI Tutor — EDUassist AI" },
+      { title: "AI Tutor — EduAssist.AI" },
       { name: "description", content: "Chat with your personal CBSE AI tutor. Get step-by-step explanations, notes, and practice questions adapted to your grade." },
     ],
   }),
@@ -323,7 +323,7 @@ function ChatPage() {
           </button>
         </form>
         <p className="mt-2 text-center text-[11px] text-muted-foreground">
-          EDUassist AI may make mistakes. Always double-check important answers with your teacher or textbook.
+          EduAssist.AI may make mistakes. Always double-check important answers with your teacher or textbook.
         </p>
       </main>
     </div>
@@ -343,7 +343,7 @@ function EmptyState({ onPick }: { onPick: (s: string) => void }) {
         <Sparkles className="h-7 w-7 text-primary-foreground" />
       </div>
       <h2 className="mt-5 text-2xl font-bold" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
-        Hi! I'm your <span className="text-gradient">EDUassist AI</span> tutor
+        Hi! I'm your <span className="text-gradient">EduAssist.AI</span> tutor
       </h2>
       <p className="mt-2 max-w-md text-sm text-muted-foreground">
         Ask me anything from your CBSE syllabus — I'll explain it step-by-step at your level.

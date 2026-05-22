@@ -6,9 +6,9 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="EDUassist AI logo" className="h-10 w-10 rounded-xl object-cover" />
+            <img src={logo} alt="EduAssist.AI logo" className="h-10 w-10 rounded-xl object-cover" />
             <span className="text-lg font-bold" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
-              EDUassist <span className="text-gradient">AI</span>
+              EduAssist <span className="text-gradient">AI</span>
             </span>
           </div>
           <p className="mt-4 max-w-md text-sm text-muted-foreground">
@@ -35,7 +35,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} EDUassist AI · Made for CBSE students across India
+        © {new Date().getFullYear()} EduAssist.AI · Made for CBSE students across India
       </div>
     </footer>
   );

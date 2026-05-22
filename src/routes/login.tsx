@@ -4,12 +4,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { resolveLoginEmail } from "@/lib/auth.functions";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/login")({ component: LoginPage });
+
+const DEMO_ACCOUNTS: { label: string; username: string }[] = [
+  { label: "Admin", username: "admin_demo" },
+  { label: "Teacher", username: "teacher_demo" },
+  { label: "Student 1", username: "1000000001_OIS" },
+  { label: "Parent 1", username: "p1000000001_OIS" },
+  { label: "Student 2", username: "1000000002_OIS" },
+  { label: "Parent 2", username: "p1000000002_OIS" },
+  { label: "Student 3", username: "1000000003_OIS" },
+  { label: "Parent 3", username: "p1000000003_OIS" },
+];
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -26,7 +37,6 @@ function LoginPage() {
       const { email } = await resolveLoginEmail({ data: { username } });
       const { error: signErr } = await supabase.auth.signInWithPassword({ email, password });
       if (signErr) throw signErr;
-      // Redirect based on role — auth provider will refresh
       const u = username.trim().toLowerCase();
       if (u.startsWith("p") && /^p\d{10}_ois$/.test(u)) navigate({ to: "/parent" });
       else if (/^\d{10}_ois$/.test(u)) navigate({ to: "/chat" });
@@ -38,27 +48,36 @@ function LoginPage() {
     }
   }
 
+  function fillDemo(u: string) {
+    setUsername(u);
+    setPassword("Demo1234");
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex flex-1 items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-2xl">Sign in to EDUassist AI</CardTitle>
-            <CardDescription>
-              Students: <code>1234567890_OIS</code> · Parents: <code>p1234567890_OIS</code>
-            </CardDescription>
+            <CardTitle className="text-2xl">Sign in to EduAssist.AI</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="mb-4 rounded-lg border bg-muted/40 p-3 text-xs text-muted-foreground">
-              <p className="mb-1 font-semibold text-foreground">Demo accounts (password: <code>Demo1234</code>)</p>
-              <ul className="space-y-0.5">
-                <li>Admin: <code>admin_demo</code></li>
-                <li>Teacher: <code>teacher_demo</code></li>
-                <li>Student: <code>1000000001_OIS</code> · Parent: <code>p1000000001_OIS</code></li>
-                <li>Student: <code>1000000002_OIS</code> · Parent: <code>p1000000002_OIS</code></li>
-                <li>Student: <code>1000000003_OIS</code> · Parent: <code>p1000000003_OIS</code></li>
-              </ul>
+            <div className="mb-4">
+              <p className="mb-2 text-xs font-medium text-muted-foreground">
+                Quick demo login (password auto-fills)
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {DEMO_ACCOUNTS.map((a) => (
+                  <button
+                    key={a.username}
+                    type="button"
+                    onClick={() => fillDemo(a.username)}
+                    className="rounded-full border border-input bg-background px-3 py-1 text-xs font-medium text-foreground transition hover:bg-accent"
+                  >
+                    {a.label}
+                  </button>
+                ))}
+              </div>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">

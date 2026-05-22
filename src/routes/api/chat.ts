@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-const SYSTEM_PROMPT = (grade: string, subject: string) => `You are EDUassist AI, a friendly, encouraging tutor for Indian CBSE students following the NCERT curriculum.
+const SYSTEM_PROMPT = (grade: string, subject: string) => `You are EduAssist.AI, a friendly, encouraging tutor for Indian CBSE students following the NCERT curriculum.
 
 Student context:
 - Grade / Class: ${grade}

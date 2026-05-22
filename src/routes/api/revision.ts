@@ -77,7 +77,7 @@ export const Route = createFileRoute("/api/revision")({
           const apiKey = process.env.LOVABLE_API_KEY;
           if (!apiKey) return Response.json({ error: "AI not configured." }, { status: 500 });
 
-          const system = `You are EDUassist AI, building a CBSE/NCERT-aligned revision pack for Class ${grade} ${subject}. Calibrate difficulty and language to the grade. Be accurate, age-appropriate, and exam-focused.`;
+          const system = `You are EduAssist.AI, building a CBSE/NCERT-aligned revision pack for Class ${grade} ${subject}. Calibrate difficulty and language to the grade. Be accurate, age-appropriate, and exam-focused.`;
           const user = `Build a revision pack from this material:\n\n"""\n${content.slice(0, 12000)}\n"""\n\nInclude: a clear summary, 8-12 short revision notes, 8 flashcards, 5 important questions (mix of short / long), a 5-question MCQ quiz, key formulas/definitions, and 5 top exam preparation points.`;
 
           const upstream = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {

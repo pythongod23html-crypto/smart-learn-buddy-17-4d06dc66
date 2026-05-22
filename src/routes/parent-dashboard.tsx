@@ -14,7 +14,7 @@ import { Brain, Sparkles, AlertTriangle, CheckCircle2, BookOpen, Clock3 } from "
 export const Route = createFileRoute("/parent-dashboard")({
   head: () => ({
     meta: [
-      { title: "Parent Dashboard — EDUassist AI" },
+      { title: "Parent Dashboard — EduAssist.AI" },
       { name: "description", content: "Track your child's learning progress, quiz accuracy, subject mastery and AI recommendations." },
     ],
   }),

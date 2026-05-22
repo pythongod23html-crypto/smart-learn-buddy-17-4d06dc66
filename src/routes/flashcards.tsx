@@ -6,7 +6,7 @@ import { Loader2, Sparkles, ChevronLeft, ChevronRight, RotateCcw } from "lucide-
 export const Route = createFileRoute("/flashcards")({
   head: () => ({
     meta: [
-      { title: "Flashcards Generator — EDUassist AI" },
+      { title: "Flashcards Generator — EduAssist.AI" },
       { name: "description", content: "Generate CBSE study flashcards on any topic and review with flip animations." },
     ],
   }),

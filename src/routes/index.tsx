@@ -11,9 +11,9 @@ import { Footer } from "@/components/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "EDUassist AI — Your Personal CBSE AI Tutor for Grades 1–12" },
+      { title: "EduAssist.AI — Your Personal CBSE AI Tutor for Grades 1–12" },
       { name: "description", content: "AI-powered CBSE learning platform for students from Grade 1 to 12. Doubt solving, notes, quizzes, revision and exam prep — adapted to your class." },
-      { property: "og:title", content: "EDUassist AI — Smarter Learning for CBSE Students" },
+      { property: "og:title", content: "EduAssist.AI — Smarter Learning for CBSE Students" },
       { property: "og:description", content: "Personal AI tutor following NCERT and CBSE curriculum. Learn smarter from Class 1 to Class 12." },
     ],
   }),
@@ -49,7 +49,7 @@ const steps = [
 ];
 
 const faqs = [
-  { q: "Which classes does EDUassist AI support?", a: "All CBSE grades from Class 1 to Class 12, across every major subject." },
+  { q: "Which classes does EduAssist.AI support?", a: "All CBSE grades from Class 1 to Class 12, across every major subject." },
   { q: "Does it follow the NCERT syllabus?", a: "Yes. Explanations, examples and practice align with NCERT and CBSE board guidelines." },
   { q: "Is it safe for younger students?", a: "Absolutely. The tutor uses age-appropriate language, refuses unsafe content, and never encourages cheating." },
   { q: "Can I generate notes and worksheets?", a: "Yes — ask for notes, MCQs, flashcards, mind maps, formula sheets or full worksheets for any chapter." },
@@ -215,7 +215,7 @@ function Index() {
             <h2 className="text-3xl font-bold md:text-4xl" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
               Frequently asked
             </h2>
-            <p className="mt-3 text-muted-foreground">Quick answers about EDUassist AI.</p>
+            <p className="mt-3 text-muted-foreground">Quick answers about EduAssist.AI.</p>
           </div>
           <div className="mt-10 space-y-3">
             {faqs.map(f => (
@@ -238,7 +238,7 @@ function Index() {
             Start learning smarter today
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-primary-foreground/90">
-            Join thousands of CBSE students using EDUassist AI to study faster, score higher, and actually enjoy learning.
+            Join thousands of CBSE students using EduAssist.AI to study faster, score higher, and actually enjoy learning.
           </p>
           <Link
             to="/chat"

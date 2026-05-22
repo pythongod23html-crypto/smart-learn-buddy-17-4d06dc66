@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 export const Route = createFileRoute("/teacher")({
   head: () => ({
     meta: [
-      { title: "Teacher AI Assistant — EDUassist AI" },
+      { title: "Teacher AI Assistant — EduAssist.AI" },
       { name: "description", content: "Generate quizzes, worksheets, and homework with a single prompt. Share with your class." },
     ],
   }),

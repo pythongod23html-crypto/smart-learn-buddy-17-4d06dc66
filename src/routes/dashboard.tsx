@@ -12,7 +12,7 @@ import { useState } from "react";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — EDUassist AI" },
+      { title: "Dashboard — EduAssist.AI" },
       { name: "description", content: "Your personal learning dashboard: streaks, progress, recent chats and daily practice." },
     ],
   }),
