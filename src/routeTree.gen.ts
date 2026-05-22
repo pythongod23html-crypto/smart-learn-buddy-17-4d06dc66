@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WeeklyQuizRouteImport } from './routes/weekly-quiz'
 import { Route as TeacherRouteImport } from './routes/teacher'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RevisionRouteImport } from './routes/revision'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PlannerRouteImport } from './routes/planner'
@@ -30,9 +32,19 @@ import { Route as ApiParentChatRouteImport } from './routes/api/parent-chat'
 import { Route as ApiGenerateRouteImport } from './routes/api/generate'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const WeeklyQuizRoute = WeeklyQuizRouteImport.update({
+  id: '/weekly-quiz',
+  path: '/weekly-quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TeacherRoute = TeacherRouteImport.update({
   id: '/teacher',
   path: '/teacher',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RevisionRoute = RevisionRouteImport.update({
@@ -145,7 +157,9 @@ export interface FileRoutesByFullPath {
   '/planner': typeof PlannerRoute
   '/quiz': typeof QuizRoute
   '/revision': typeof RevisionRoute
+  '/settings': typeof SettingsRoute
   '/teacher': typeof TeacherRoute
+  '/weekly-quiz': typeof WeeklyQuizRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
@@ -167,7 +181,9 @@ export interface FileRoutesByTo {
   '/planner': typeof PlannerRoute
   '/quiz': typeof QuizRoute
   '/revision': typeof RevisionRoute
+  '/settings': typeof SettingsRoute
   '/teacher': typeof TeacherRoute
+  '/weekly-quiz': typeof WeeklyQuizRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
@@ -190,7 +206,9 @@ export interface FileRoutesById {
   '/planner': typeof PlannerRoute
   '/quiz': typeof QuizRoute
   '/revision': typeof RevisionRoute
+  '/settings': typeof SettingsRoute
   '/teacher': typeof TeacherRoute
+  '/weekly-quiz': typeof WeeklyQuizRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
@@ -214,7 +232,9 @@ export interface FileRouteTypes {
     | '/planner'
     | '/quiz'
     | '/revision'
+    | '/settings'
     | '/teacher'
+    | '/weekly-quiz'
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
@@ -236,7 +256,9 @@ export interface FileRouteTypes {
     | '/planner'
     | '/quiz'
     | '/revision'
+    | '/settings'
     | '/teacher'
+    | '/weekly-quiz'
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
@@ -258,7 +280,9 @@ export interface FileRouteTypes {
     | '/planner'
     | '/quiz'
     | '/revision'
+    | '/settings'
     | '/teacher'
+    | '/weekly-quiz'
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
@@ -281,7 +305,9 @@ export interface RootRouteChildren {
   PlannerRoute: typeof PlannerRoute
   QuizRoute: typeof QuizRoute
   RevisionRoute: typeof RevisionRoute
+  SettingsRoute: typeof SettingsRoute
   TeacherRoute: typeof TeacherRoute
+  WeeklyQuizRoute: typeof WeeklyQuizRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiGenerateRoute: typeof ApiGenerateRoute
   ApiParentChatRoute: typeof ApiParentChatRoute
@@ -292,11 +318,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/weekly-quiz': {
+      id: '/weekly-quiz'
+      path: '/weekly-quiz'
+      fullPath: '/weekly-quiz'
+      preLoaderRoute: typeof WeeklyQuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/teacher': {
       id: '/teacher'
       path: '/teacher'
       fullPath: '/teacher'
       preLoaderRoute: typeof TeacherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/revision': {
@@ -449,7 +489,9 @@ const rootRouteChildren: RootRouteChildren = {
   PlannerRoute: PlannerRoute,
   QuizRoute: QuizRoute,
   RevisionRoute: RevisionRoute,
+  SettingsRoute: SettingsRoute,
   TeacherRoute: TeacherRoute,
+  WeeklyQuizRoute: WeeklyQuizRoute,
   ApiChatRoute: ApiChatRoute,
   ApiGenerateRoute: ApiGenerateRoute,
   ApiParentChatRoute: ApiParentChatRoute,

@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-const SYSTEM_PROMPT = (grade: string, subject: string) => `You are EduAssist.AI, a friendly, encouraging tutor for Indian CBSE students following the NCERT curriculum.
+const SYSTEM_PROMPT = (grade: string, subject: string, homework: boolean) => `You are EduAssist.AI, a friendly, encouraging tutor for Indian CBSE students following the NCERT curriculum.
 
 Student context:
 - Grade / Class: ${grade}
 - Subject: ${subject}
+- Mode: ${homework ? "HOMEWORK HELP" : "Free study"}
 
 Adapt your explanations to the student's grade:
 - Grades 1–5: Very simple language, fun analogies, short sentences, encouraging tone.
@@ -12,12 +13,22 @@ Adapt your explanations to the student's grade:
 - Grades 9–10: CBSE board-focused. Use important keywords, step-by-step solutions, and exam-style answers.
 - Grades 11–12: Advanced explanations, derivations, numericals, and analytical reasoning.
 
-Always:
+${homework ? `HOMEWORK MODE RULES (very important — do NOT break these):
+- The student is working on homework. Your job is to TEACH, not to do the homework for them.
+- NEVER give the full final answer or full solution in one reply.
+- Give exactly ONE small hint or ONE next step at a time, then STOP and ask the student to try it.
+- End every reply with a short question like "What do you think the next step is?" or "Try this part — what do you get?".
+- If the student just dumps a question or a worksheet, respond with: a short restatement of what's being asked, the key concept/formula needed, and ONE guiding hint. Do not solve it.
+- If the student pastes multiple questions at once, only engage with the FIRST one and politely ask them to work through them one by one.
+- Only reveal the final answer after the student has genuinely attempted the step and asked for the answer explicitly.
+- Keep replies short (under ~120 words). No giant walls of working.
+` : `Always:
 - Use clear headings, bullet points, and bold the important keywords (using **bold** markdown).
 - For Math/Science: show calculations step-by-step and explain formulas.
 - For Social Science: use timelines and structured points.
 - For languages: help with grammar, summaries, essays and literature.
 - End your answer with a short "Quick recap" and 2–3 practice questions when relevant.
+`}
 - Be safe and age-appropriate. Refuse harmful or unsafe requests. Never help with cheating in live exams.
 - Keep tone warm, motivating and student-friendly.`;
 
@@ -26,11 +37,12 @@ export const Route = createFileRoute("/api/chat")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { messages, grade, subject, image } = (await request.json()) as {
+          const { messages, grade, subject, image, homework } = (await request.json()) as {
             messages: { role: "user" | "assistant"; content: string }[];
             grade?: string;
             subject?: string;
             image?: string | null;
+            homework?: boolean;
           };
 
           const apiKey = process.env.LOVABLE_API_KEY;
@@ -43,7 +55,7 @@ export const Route = createFileRoute("/api/chat")({
 
           // If an image is attached, replace last user message with multimodal content
           const outMessages: any[] = [
-            { role: "system", content: SYSTEM_PROMPT(grade ?? "10", subject ?? "General") },
+            { role: "system", content: SYSTEM_PROMPT(grade ?? "10", subject ?? "General", !!homework) },
             ...messages,
           ];
           if (image && outMessages.length > 1) {
