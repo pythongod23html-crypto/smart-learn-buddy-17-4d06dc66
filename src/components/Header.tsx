@@ -26,6 +26,8 @@ export function Header() {
           {role === "parent" && <Link to="/parent" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">My child</Link>}
           {role === "parent" && <Link to="/parent-chat" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">Help desk</Link>}
           {role === "parent" && <Link to="/parent-dashboard" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">Analytics</Link>}
+          <Link to="/revision" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">Revision</Link>
+          {(role === "admin" || role === "teacher" || !role) && <Link to="/teacher" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">Teacher</Link>}
           <Link to="/planner" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">Planner</Link>
           {(role === "student" || !role) && <Link to="/dashboard" className="text-sm font-medium text-muted-foreground transition hover:text-foreground">Dashboard</Link>}
         </nav>

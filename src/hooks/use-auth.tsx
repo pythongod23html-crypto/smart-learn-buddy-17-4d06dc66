@@ -4,7 +4,7 @@ import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyContext } from "@/lib/auth.functions";
 
-type Role = "admin" | "student" | "parent" | null;
+type Role = "admin" | "student" | "parent" | "teacher" | null;
 
 type AuthContextValue = {
   session: Session | null;
