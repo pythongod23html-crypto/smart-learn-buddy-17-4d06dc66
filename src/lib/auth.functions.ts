@@ -183,11 +183,13 @@ export const getMyContext = createServerFn({ method: "GET" })
     const roleList = (roles ?? []).map((r) => r.role as string);
     const role = roleList.includes("admin")
       ? "admin"
-      : roleList.includes("parent")
-        ? "parent"
-        : roleList.includes("student")
-          ? "student"
-          : null;
+      : roleList.includes("teacher")
+        ? "teacher"
+        : roleList.includes("parent")
+          ? "parent"
+          : roleList.includes("student")
+            ? "student"
+            : null;
 
     type StudentInfo = {
       id: string;
