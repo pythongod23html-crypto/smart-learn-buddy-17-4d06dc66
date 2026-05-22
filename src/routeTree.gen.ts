@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TeacherRouteImport } from './routes/teacher'
+import { Route as RevisionRouteImport } from './routes/revision'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as ParentDashboardRouteImport } from './routes/parent-dashboard'
@@ -28,6 +30,16 @@ import { Route as ApiParentChatRouteImport } from './routes/api/parent-chat'
 import { Route as ApiGenerateRouteImport } from './routes/api/generate'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const TeacherRoute = TeacherRouteImport.update({
+  id: '/teacher',
+  path: '/teacher',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RevisionRoute = RevisionRouteImport.update({
+  id: '/revision',
+  path: '/revision',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
@@ -132,6 +144,8 @@ export interface FileRoutesByFullPath {
   '/parent-dashboard': typeof ParentDashboardRoute
   '/planner': typeof PlannerRoute
   '/quiz': typeof QuizRoute
+  '/revision': typeof RevisionRoute
+  '/teacher': typeof TeacherRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
@@ -152,6 +166,8 @@ export interface FileRoutesByTo {
   '/parent-dashboard': typeof ParentDashboardRoute
   '/planner': typeof PlannerRoute
   '/quiz': typeof QuizRoute
+  '/revision': typeof RevisionRoute
+  '/teacher': typeof TeacherRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
@@ -173,6 +189,8 @@ export interface FileRoutesById {
   '/parent-dashboard': typeof ParentDashboardRoute
   '/planner': typeof PlannerRoute
   '/quiz': typeof QuizRoute
+  '/revision': typeof RevisionRoute
+  '/teacher': typeof TeacherRoute
   '/api/chat': typeof ApiChatRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/parent-chat': typeof ApiParentChatRoute
@@ -195,6 +213,8 @@ export interface FileRouteTypes {
     | '/parent-dashboard'
     | '/planner'
     | '/quiz'
+    | '/revision'
+    | '/teacher'
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
@@ -215,6 +235,8 @@ export interface FileRouteTypes {
     | '/parent-dashboard'
     | '/planner'
     | '/quiz'
+    | '/revision'
+    | '/teacher'
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
@@ -235,6 +257,8 @@ export interface FileRouteTypes {
     | '/parent-dashboard'
     | '/planner'
     | '/quiz'
+    | '/revision'
+    | '/teacher'
     | '/api/chat'
     | '/api/generate'
     | '/api/parent-chat'
@@ -256,6 +280,8 @@ export interface RootRouteChildren {
   ParentDashboardRoute: typeof ParentDashboardRoute
   PlannerRoute: typeof PlannerRoute
   QuizRoute: typeof QuizRoute
+  RevisionRoute: typeof RevisionRoute
+  TeacherRoute: typeof TeacherRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiGenerateRoute: typeof ApiGenerateRoute
   ApiParentChatRoute: typeof ApiParentChatRoute
@@ -266,6 +292,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/teacher': {
+      id: '/teacher'
+      path: '/teacher'
+      fullPath: '/teacher'
+      preLoaderRoute: typeof TeacherRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/revision': {
+      id: '/revision'
+      path: '/revision'
+      fullPath: '/revision'
+      preLoaderRoute: typeof RevisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quiz': {
       id: '/quiz'
       path: '/quiz'
@@ -408,6 +448,8 @@ const rootRouteChildren: RootRouteChildren = {
   ParentDashboardRoute: ParentDashboardRoute,
   PlannerRoute: PlannerRoute,
   QuizRoute: QuizRoute,
+  RevisionRoute: RevisionRoute,
+  TeacherRoute: TeacherRoute,
   ApiChatRoute: ApiChatRoute,
   ApiGenerateRoute: ApiGenerateRoute,
   ApiParentChatRoute: ApiParentChatRoute,
