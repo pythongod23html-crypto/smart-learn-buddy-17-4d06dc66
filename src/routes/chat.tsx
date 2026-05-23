@@ -46,9 +46,11 @@ function MarkdownView({ text }: { text: string }) {
 }
 
 function ChatPage() {
+  const { role } = useAuth();
+  const isParent = role === "parent";
   const [grade, setGrade] = useState("10");
   const [subject, setSubject] = useState("Mathematics");
-  const [homework, setHomework] = useState(true);
+  const [homework, setHomework] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
