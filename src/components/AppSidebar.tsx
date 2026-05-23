@@ -22,7 +22,7 @@ export function AppSidebar() {
   const { role } = useAuth();
 
   const primary: Item[] = [
-    { title: "Homework mode", url: "/chat", icon: BookOpen },
+    { title: role === "parent" ? "Homework mode" : "AI tutor", url: "/chat", icon: BookOpen },
     { title: "Home", url: "/", icon: Home },
   ];
 
