@@ -8,6 +8,8 @@ export function Header() {
   const { session, role, signOut } = useAuth();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
+  // Hide top bar entirely for logged-in users — the sidebar is the nav.
+  if (session) return null;
   return (
     <header className="sticky top-0 z-40 w-full glass">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5">
