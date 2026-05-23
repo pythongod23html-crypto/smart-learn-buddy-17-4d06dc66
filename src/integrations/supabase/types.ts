@@ -129,7 +129,6 @@ export type Database = {
           fee_status: string
           id: string
           parent_user_id: string | null
-          password_plain: string
           student_code: string
           student_name: string
           student_user_id: string | null
@@ -143,7 +142,6 @@ export type Database = {
           fee_status?: string
           id?: string
           parent_user_id?: string | null
-          password_plain: string
           student_code: string
           student_name: string
           student_user_id?: string | null
@@ -157,7 +155,6 @@ export type Database = {
           fee_status?: string
           id?: string
           parent_user_id?: string | null
-          password_plain?: string
           student_code?: string
           student_name?: string
           student_user_id?: string | null
