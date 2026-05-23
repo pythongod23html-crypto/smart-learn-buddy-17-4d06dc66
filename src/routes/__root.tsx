@@ -4,12 +4,13 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { AuthProvider } from "@/hooks/use-auth";
+import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -130,17 +131,35 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <SidebarProvider defaultOpen={false}>
-            <div className="flex min-h-screen w-full">
-              <AppSidebar />
-              <div className="relative flex-1">
-                <SidebarTrigger className="fixed left-2 top-2 z-50 rounded-md border border-border bg-background/80 backdrop-blur" />
-                <Outlet />
-              </div>
-            </div>
-          </SidebarProvider>
+          <AppShell />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
+  );
+}
+
+function AppShell() {
+  const { session } = useAuth();
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  const hideSidebar = !session || path === "/login" || path === "/admin-signup";
+
+  if (hideSidebar) {
+    return (
+      <div className="min-h-screen w-full">
+        <Outlet />
+      </div>
+    );
+  }
+
+  return (
+    <SidebarProvider defaultOpen={false}>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <div className="relative flex-1">
+          <SidebarTrigger className="fixed left-2 top-2 z-50 rounded-md border border-border bg-background/80 backdrop-blur" />
+          <Outlet />
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
