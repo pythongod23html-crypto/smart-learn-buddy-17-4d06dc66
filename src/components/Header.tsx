@@ -11,7 +11,9 @@ export function Header() {
   // Hide top bar entirely for logged-in users — the sidebar is the nav.
   if (session) return null;
   return (
-    <header className="sticky top-0 z-40 w-full glass">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-40 w-full glass">
+
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5">
         <Link to="/" className="flex shrink-0 items-center gap-2">
           <img src={logo} alt="EduAssist.AI logo" className="h-7 w-7 rounded-lg object-cover shadow-soft" />
@@ -58,6 +60,8 @@ export function Header() {
         )}
         </div>
       </div>
-    </header>
+      </header>
+      <div aria-hidden className="h-14" />
+    </>
   );
 }
