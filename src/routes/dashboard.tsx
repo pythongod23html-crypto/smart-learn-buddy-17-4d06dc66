@@ -44,18 +44,19 @@ const dailyQuestions = [
 ];
 
 function Dashboard() {
-  const { role, loading } = useAuth();
+  const { role, loading, session } = useAuth();
   const navigate = useNavigate();
   const [poppedBadge, setPoppedBadge] = useState<string | null>(null);
 
   useEffect(() => {
     if (loading) return;
+    if (!session) { navigate({ to: "/login", replace: true }); return; }
     if (role === "admin") navigate({ to: "/admin", replace: true });
     else if (role === "teacher") navigate({ to: "/teacher", replace: true });
     else if (role === "parent") navigate({ to: "/parent-dashboard", replace: true });
-  }, [role, loading, navigate]);
+  }, [role, loading, session, navigate]);
 
-  if (loading || role === "admin" || role === "teacher" || role === "parent") {
+  if (loading || !session || role === "admin" || role === "teacher" || role === "parent") {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Loading your dashboard…</div>;
   }
 
