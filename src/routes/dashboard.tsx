@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import {
@@ -7,7 +7,8 @@ import {
   Zap, Award, Moon, Star,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/dashboard")({
   }),
   component: Dashboard,
 });
+
 
 const subjectShortcuts = [
   { name: "Mathematics", icon: Calculator, color: "from-blue-500 to-indigo-500", topic: "Quadratic Equations" },
@@ -42,7 +44,21 @@ const dailyQuestions = [
 ];
 
 function Dashboard() {
+  const { role, loading } = useAuth();
+  const navigate = useNavigate();
   const [poppedBadge, setPoppedBadge] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (loading) return;
+    if (role === "admin") navigate({ to: "/admin", replace: true });
+    else if (role === "teacher") navigate({ to: "/teacher", replace: true });
+    else if (role === "parent") navigate({ to: "/parent-dashboard", replace: true });
+  }, [role, loading, navigate]);
+
+  if (loading || role === "admin" || role === "teacher" || role === "parent") {
+    return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Loading your dashboard…</div>;
+  }
+
   const xp = 1240;
   const xpToNext = 1500;
   const level = 7;
