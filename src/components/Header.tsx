@@ -60,6 +60,8 @@ export function Header() {
         )}
         </div>
       </div>
-    </header>
+      </header>
+      <div aria-hidden className="h-14" />
+    </>
   );
 }
