@@ -25,14 +25,10 @@ export function Header() {
           <Link to="/" hash="features" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Features</Link>
           <Link to="/" hash="subjects" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Subjects</Link>
           <Link to="/quiz" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Quiz</Link>
-          <Link to="/flashcards" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Flashcards</Link>
           {role === "admin" && <Link to="/admin" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Admin</Link>}
           {role === "parent" && <Link to="/parent" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">My child</Link>}
           {role === "parent" && <Link to="/parent-chat" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Help</Link>}
           {role === "parent" && <Link to="/parent-dashboard" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Analytics</Link>}
-          <Link to="/revision" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Revision</Link>
-          {(role === "admin" || role === "teacher" || !role) && <Link to="/teacher" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Teacher</Link>}
-          <Link to="/planner" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Planner</Link>
           {(role === "student" || !role) && <Link to="/dashboard" className="whitespace-nowrap text-xs font-medium text-muted-foreground transition hover:text-foreground">Dashboard</Link>}
         </nav>
         <div className="flex shrink-0 items-center gap-2">
