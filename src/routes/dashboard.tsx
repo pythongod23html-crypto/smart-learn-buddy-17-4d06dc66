@@ -46,6 +46,7 @@ const dailyQuestions = [
 function Dashboard() {
   const { role, loading } = useAuth();
   const navigate = useNavigate();
+  const [poppedBadge, setPoppedBadge] = useState<string | null>(null);
 
   useEffect(() => {
     if (loading) return;
@@ -58,7 +59,6 @@ function Dashboard() {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Loading your dashboard…</div>;
   }
 
-  const [poppedBadge, setPoppedBadge] = useState<string | null>(null);
   const xp = 1240;
   const xpToNext = 1500;
   const level = 7;
