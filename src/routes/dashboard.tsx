@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import {
@@ -7,7 +7,8 @@ import {
   Zap, Award, Moon, Star,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/dashboard")({
   }),
   component: Dashboard,
 });
+
 
 const subjectShortcuts = [
   { name: "Mathematics", icon: Calculator, color: "from-blue-500 to-indigo-500", topic: "Quadratic Equations" },
