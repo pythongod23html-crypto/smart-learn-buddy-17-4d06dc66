@@ -192,7 +192,7 @@ function StudentsList() {
               <th className="py-2 pr-3">Code</th>
               <th className="py-2 pr-3">Name</th>
               <th className="py-2 pr-3">Grade</th>
-              
+              <th className="py-2 pr-3">Password</th>
               <th className="py-2 pr-3">Fee</th>
               <th className="py-2 pr-3">Status</th>
               <th className="py-2 pr-3">Actions</th>
@@ -213,7 +213,7 @@ type StudentRowProps = {
     student_code: string;
     student_name: string;
     class_grade: string | null;
-    
+    password_plain: string;
     fee_amount_due: number;
     fee_status: string;
     fee_notes: string | null;
@@ -249,7 +249,7 @@ function StudentRow({ s, onDelete }: StudentRowProps) {
       <td className="py-2 pr-3 font-mono text-xs">{s.student_code}</td>
       <td className="py-2 pr-3">{s.student_name}</td>
       <td className="py-2 pr-3">{s.class_grade ?? "—"}</td>
-      
+      <td className="py-2 pr-3 font-mono text-xs">{s.password_plain}</td>
       {editing ? (
         <>
           <td className="py-2 pr-3"><Input value={fee} onChange={(e) => setFee(e.target.value)} className="h-8 w-24" /></td>
