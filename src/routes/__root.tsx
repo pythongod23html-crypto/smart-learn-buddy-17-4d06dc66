@@ -131,7 +131,7 @@ function RootComponent() {
   const PORTAL_ROUTES = [
     "/chat", "/dashboard", "/quiz", "/flashcards", "/revision", "/planner",
     "/settings", "/weekly-quiz", "/teacher", "/admin", "/parent",
-    "/parent-chat", "/parent-dashboard",
+    "/parent-chat", "/parent-dashboard", "/homework",
   ];
   const showSidebar = PORTAL_ROUTES.some(r => pathname === r || pathname.startsWith(r + "/"));
 
