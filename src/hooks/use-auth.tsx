@@ -24,7 +24,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
-      qc.invalidateQueries({ queryKey: ["me"] });
+      if (!s) {
+        qc.removeQueries({ queryKey: ["me"] });
+      } else {
+        qc.invalidateQueries({ queryKey: ["me"] });
+      }
     });
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
