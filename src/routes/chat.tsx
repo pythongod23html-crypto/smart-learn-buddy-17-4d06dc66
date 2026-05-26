@@ -6,13 +6,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import { ClauseAvatar } from "@/components/ClauseAvatar";
+import { SparkAvatar } from "@/components/SparkAvatar";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({
     meta: [
-      { title: "Clause — Your AI Tutor" },
-      { name: "description", content: "Chat with Clause, your personal CBSE AI tutor. Get step-by-step explanations, notes, and practice questions adapted to your grade." },
+      { title: "Spark — Your AI Tutor" },
+      { name: "description", content: "Chat with Spark, your personal CBSE AI tutor. Get step-by-step explanations, notes, and practice questions adapted to your grade." },
     ],
   }),
   component: ChatPage,
@@ -244,9 +244,9 @@ function ChatPage() {
         {/* Sidebar */}
         <aside className="hidden w-[300px] shrink-0 flex-col gap-4 rounded-3xl border border-border bg-card/60 p-4 shadow-soft md:flex lg:w-[340px]">
           <div className="flex items-start gap-3">
-            <ClauseAvatar size={36} state="idle" />
+            <SparkAvatar size={56} state="idle" />
             <h2 className="text-base font-semibold leading-tight" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
-              How can Clause help you today?
+              How can Spark help you today?
             </h2>
           </div>
 
@@ -340,9 +340,9 @@ function ChatPage() {
 
           {isEmpty ? (
             <div className="relative z-10 flex flex-1 flex-col items-center px-4 pb-8 pt-8 md:pt-12">
-              <ClauseAvatar size={84} state="idle" />
+              <SparkAvatar size={140} state="idle" />
               <h1 className="mt-10 text-center text-3xl font-bold text-foreground md:text-4xl" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
-                How can Clause help you today?
+                How can Spark help you today?
               </h1>
               <p className="mt-2 text-center text-base text-muted-foreground">Clear your doubts instantly</p>
 
@@ -392,7 +392,7 @@ function ChatPage() {
                   <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                     {m.role === "assistant" && (
                       <div className="mr-2 mt-1 hidden shrink-0 sm:block">
-                        <ClauseAvatar size={40} state={loading && i === messages.length - 1 ? "answering" : "speaking"} />
+                        <SparkAvatar size={64} state={loading && i === messages.length - 1 ? "answering" : "speaking"} />
                       </div>
                     )}
                     <div className={m.role === "user"
@@ -405,8 +405,8 @@ function ChatPage() {
                 ))}
                 {loading && messages[messages.length - 1]?.role !== "assistant" && (
                   <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                    <ClauseAvatar size={36} state="answering" />
-                    <span>Clause is answering…</span>
+                    <SparkAvatar size={56} state="answering" />
+                    <span>Spark is answering…</span>
                   </div>
                 )}
                 {error && (
@@ -452,7 +452,7 @@ function ChatInputCard(props: {
       {imageData && (
         <div className="mb-3 flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 p-2">
           <img src={imageData} alt="preview" className="h-12 w-12 rounded-md object-cover" />
-          <span className="text-xs text-muted-foreground">Image attached — Clause will analyze it.</span>
+          <span className="text-xs text-muted-foreground">Image attached — Spark will analyze it.</span>
           <button type="button" onClick={() => setImageData(null)} className="ml-auto rounded-full p-1 hover:bg-secondary" aria-label="Remove image">
             <X className="h-4 w-4" />
           </button>
