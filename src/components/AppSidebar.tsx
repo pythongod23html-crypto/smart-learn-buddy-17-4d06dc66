@@ -1,8 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BookOpen, Settings, ClipboardList, Home, MessagesSquare, LineChart, GraduationCap, Calendar, LayoutDashboard, ShieldCheck } from "lucide-react";
+import { BookOpen, Settings, ClipboardList, MessagesSquare, LineChart, GraduationCap, Calendar, LayoutDashboard, ShieldCheck, Sparkles, BookMarked, Moon, Sun } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -12,6 +13,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 
 type Item = { title: string; url: string; icon: any; search?: Record<string, string> };
 
@@ -20,13 +22,16 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const path = useRouterState({ select: (r) => r.location.pathname });
   const { role } = useAuth();
+  const { theme, toggle } = useTheme();
 
   const primary: Item[] = [
     { title: "AI Tutor", url: "/chat", icon: BookOpen },
-    { title: "Home", url: "/", icon: Home },
   ];
 
-  const roleItems: Item[] = [];
+  const roleItems: Item[] = [
+    { title: "Quiz generator", url: "/quiz", icon: Sparkles },
+    { title: "Homework", url: "/homework", icon: BookMarked },
+  ];
   if (role === "teacher" || role === "admin") {
     roleItems.push({ title: "Weekly quiz", url: "/weekly-quiz", icon: ClipboardList });
     roleItems.push({ title: "Teacher tools", url: "/teacher", icon: GraduationCap });
@@ -88,6 +93,20 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={toggle}
+              tooltip={theme === "dark" ? "Light mode" : "Dark mode"}
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4 shrink-0" /> : <Moon className="h-4 w-4 shrink-0" />}
+              {!collapsed && <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
