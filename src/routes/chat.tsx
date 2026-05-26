@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import { SparkAvatar } from "@/components/SparkAvatar";
+import { ClauseAvatar as SparkAvatar } from "@/components/ClauseAvatar";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({
