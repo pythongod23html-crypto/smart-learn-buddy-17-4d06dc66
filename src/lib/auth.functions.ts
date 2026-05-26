@@ -93,7 +93,7 @@ export const createStudentAccount = createServerFn({ method: "POST" })
         student_code: data.student_code,
         student_name: data.student_name,
         class_grade: data.class_grade ?? null,
-        
+        password_plain: password,
         student_user_id: studentUser.user.id,
         parent_user_id: parentUser.user.id,
         fee_amount_due: data.fee_amount_due,

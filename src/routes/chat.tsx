@@ -1,24 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
-import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useRef, useState } from "react";
-import { Send, Sparkles, Loader2, GraduationCap, BookOpen, Camera, Mic, MicOff, X, NotebookPen } from "lucide-react";
+import { Send, Loader2, Camera, Mic, MicOff, X, Plus, Search, SlidersHorizontal, ChevronDown, AlertTriangle } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { ClauseAvatar } from "@/components/ClauseAvatar";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({
     meta: [
-      { title: "AI Tutor — EduAssist.AI" },
-      { name: "description", content: "Chat with your personal CBSE AI tutor. Get step-by-step explanations, notes, and practice questions adapted to your grade." },
+      { title: "Clause — Your AI Tutor" },
+      { name: "description", content: "Chat with Clause, your personal CBSE AI tutor. Get step-by-step explanations, notes, and practice questions adapted to your grade." },
     ],
   }),
   component: ChatPage,
 });
 
 type Msg = { role: "user" | "assistant"; content: string; image?: string };
+
+type Doubt = {
+  id: string;
+  subject: string;
+  title: string;
+  createdAt: number;
+  status: "open" | "resolved";
+  messages: Msg[];
+};
 
 const GRADES = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
 const SUBJECTS = [
@@ -27,14 +36,19 @@ const SUBJECTS = [
   "English", "Hindi", "Computer Science", "Accountancy", "Business Studies",
 ];
 
-const SUGGESTIONS = [
-  "Explain step-by-step",
-  "Give me notes",
-  "Create a worksheet",
-  "Ask me questions",
-  "Important formulas",
-  "Revision tips",
-];
+const STYLES = ["Detailed", "Brief", "Step-by-step"] as const;
+const DOUBTS_KEY = "clause.doubts.v1";
+
+function loadDoubts(): Doubt[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem(DOUBTS_KEY) || "[]"); } catch { return []; }
+}
+function saveDoubts(d: Doubt[]) {
+  try { localStorage.setItem(DOUBTS_KEY, JSON.stringify(d)); } catch {}
+}
+function fmtTime(ts: number) {
+  return new Date(ts).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
 
 function MarkdownView({ text }: { text: string }) {
   return (
@@ -47,24 +61,68 @@ function MarkdownView({ text }: { text: string }) {
 }
 
 function ChatPage() {
-  const { role } = useAuth();
-  const isParent = role === "parent";
   const [grade, setGrade] = useState("10");
   const [subject, setSubject] = useState("Mathematics");
-  const [homework, setHomework] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [imageData, setImageData] = useState<string | null>(null);
   const [listening, setListening] = useState(false);
+  const [style, setStyle] = useState<typeof STYLES[number]>("Detailed");
+  const [doubts, setDoubts] = useState<Doubt[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [doubtFilter, setDoubtFilter] = useState<"open" | "resolved">("open");
+  const [doubtSearch, setDoubtSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => { setDoubts(loadDoubts()); }, []);
+  useEffect(() => { if (doubts.length) saveDoubts(doubts); }, [doubts]);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
+
+  const newDoubt = () => {
+    setActiveId(null);
+    setMessages([]);
+    setInput("");
+    setImageData(null);
+    setError(null);
+  };
+
+  const openDoubt = (d: Doubt) => {
+    setActiveId(d.id);
+    setMessages(d.messages);
+    setSubject(d.subject);
+    setError(null);
+  };
+
+  const upsertDoubt = (msgs: Msg[]) => {
+    setDoubts(prev => {
+      const id = activeId ?? crypto.randomUUID();
+      const title = msgs.find(m => m.role === "user")?.content?.slice(0, 80) || "New doubt";
+      const existing = prev.find(d => d.id === id);
+      const updated: Doubt = existing
+        ? { ...existing, messages: msgs, title }
+        : { id, subject, title, createdAt: Date.now(), status: "open", messages: msgs };
+      if (!activeId) setActiveId(id);
+      const next = existing ? prev.map(d => (d.id === id ? updated : d)) : [updated, ...prev];
+      saveDoubts(next);
+      return next;
+    });
+  };
+
+  const toggleResolved = (id: string) => {
+    setDoubts(prev => {
+      const next = prev.map(d => d.id === id ? { ...d, status: d.status === "open" ? "resolved" as const : "open" as const } : d);
+      saveDoubts(next);
+      return next;
+    });
+  };
 
   const send = async (text: string) => {
     const trimmed = text.trim();
@@ -73,6 +131,7 @@ function ChatPage() {
     const userMsg: Msg = { role: "user", content: trimmed || "(Please solve this from the image)", image: imageData ?? undefined };
     const next = [...messages, userMsg];
     setMessages(next);
+    upsertDoubt(next);
     setInput("");
     const sentImage = imageData;
     setImageData(null);
@@ -82,7 +141,7 @@ function ChatPage() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next, grade, subject, image: sentImage, homework }),
+        body: JSON.stringify({ messages: next, grade, subject, image: sentImage, style }),
       });
       if (!res.ok || !res.body) {
         const data = await res.json().catch(() => ({}));
@@ -127,6 +186,7 @@ function ChatPage() {
           }
         }
       }
+      setMessages(prev => { upsertDoubt(prev); return prev; });
     } catch (e: any) {
       setError(e.message || "Something went wrong.");
       setMessages(prev => prev.filter(m => m.content !== ""));
@@ -171,209 +231,311 @@ function ChatPage() {
     setListening(true);
   };
 
+  const filteredDoubts = doubts
+    .filter(d => d.status === doubtFilter)
+    .filter(d => !doubtSearch || d.title.toLowerCase().includes(doubtSearch.toLowerCase()) || d.subject.toLowerCase().includes(doubtSearch.toLowerCase()));
+
+  const isEmpty = messages.length === 0;
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 md:px-6">
-        {/* Selector */}
-        <div className="glass flex flex-wrap items-center gap-3 rounded-2xl p-3 shadow-soft">
-          <div className="flex items-center gap-2 rounded-xl bg-card px-3 py-2">
-            <GraduationCap className="h-4 w-4 text-primary" />
-            <label className="text-xs font-medium text-muted-foreground">Class</label>
-            <select
-              value={grade}
-              onChange={e => setGrade(e.target.value)}
-              className="bg-transparent text-sm font-semibold focus:outline-none"
-            >
-              {GRADES.map(g => <option key={g} value={g}>Class {g}</option>)}
-            </select>
+      <main className="mx-auto flex w-full max-w-7xl flex-1 gap-4 p-3 md:p-5">
+        {/* Sidebar */}
+        <aside className="hidden w-[300px] shrink-0 flex-col gap-4 rounded-3xl border border-border bg-card/60 p-4 shadow-soft md:flex lg:w-[340px]">
+          <div className="flex items-start gap-3">
+            <ClauseAvatar size={36} state="idle" />
+            <h2 className="text-base font-semibold leading-tight" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
+              How can Clause help you today?
+            </h2>
           </div>
-          <div className="flex items-center gap-2 rounded-xl bg-card px-3 py-2">
-            <BookOpen className="h-4 w-4 text-primary" />
-            <label className="text-xs font-medium text-muted-foreground">Subject</label>
-            <select
-              value={subject}
-              onChange={e => setSubject(e.target.value)}
-              className="bg-transparent text-sm font-semibold focus:outline-none"
-            >
-              {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+
+          <button
+            onClick={newDoubt}
+            className="flex items-center justify-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-semibold text-accent-foreground transition hover:opacity-90"
+          >
+            <Plus className="h-4 w-4" /> New Doubt
+          </button>
+
+          <button
+            onClick={() => setShowSearch(v => !v)}
+            className="flex items-center justify-center gap-2 rounded-full py-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+          >
+            <Search className="h-4 w-4" /> Search Module Questions
+          </button>
+
+          {showSearch && (
+            <input
+              autoFocus
+              value={doubtSearch}
+              onChange={e => setDoubtSearch(e.target.value)}
+              placeholder="Search your doubts…"
+              className="rounded-xl border border-border bg-background px-3 py-2 text-sm focus:border-primary/50 focus:outline-none"
+            />
+          )}
+
+          <div className="mt-1 flex items-center justify-between">
+            <h3 className="text-base font-bold">My Doubts</h3>
+            {filteredDoubts.some(d => d.status === "open") && (
+              <AlertTriangle className="h-5 w-5 text-foreground/80" />
+            )}
           </div>
-          {isParent && (
-            <button
-              type="button"
-              onClick={() => setHomework(h => !h)}
-              className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition ${homework ? "border-primary/50 bg-primary/10 text-primary" : "border-input bg-card text-muted-foreground hover:text-foreground"}`}
-              title={homework ? "Homework mode ON — bot gives hints only" : "Homework mode OFF — full explanations"}
-            >
-              <NotebookPen className="h-3.5 w-3.5" />
-              Homework mode {homework ? "ON" : "OFF"}
+
+          <div className="flex items-center gap-2">
+            <button className="inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1 text-xs">
+              <SlidersHorizontal className="h-3.5 w-3.5" /> Filter
             </button>
-          )}
-          <span className="ml-auto hidden items-center gap-1.5 text-xs text-muted-foreground md:inline-flex">
-            <Sparkles className="h-3.5 w-3.5 text-primary" /> Tuned to NCERT · CBSE
-          </span>
-        </div>
+            <button
+              onClick={() => setDoubtFilter("open")}
+              className={`rounded-lg border px-3 py-1 text-xs font-medium ${doubtFilter === "open" ? "border-primary text-primary" : "border-border text-muted-foreground"}`}
+            >
+              Open
+            </button>
+            <button
+              onClick={() => setDoubtFilter("resolved")}
+              className={`rounded-lg border px-3 py-1 text-xs font-medium ${doubtFilter === "resolved" ? "border-primary text-primary" : "border-border text-muted-foreground"}`}
+            >
+              Resolved
+            </button>
+          </div>
 
-        {/* Messages */}
-        <div
-          ref={scrollRef}
-          className="mt-4 flex-1 space-y-4 overflow-y-auto rounded-3xl border border-border bg-card p-4 shadow-soft md:p-6"
-          style={{ minHeight: "55vh", maxHeight: "65vh" }}
-        >
-          {messages.length === 0 && (
-            <EmptyState onPick={s => send(`${s} on today's topic in ${subject} for Class ${grade}.`)} />
-          )}
-
-          {messages.map((m, i) => (
-            <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-              {m.role === "assistant" && (
-                <div className="mr-2 mt-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-full gradient-primary text-primary-foreground sm:flex">
-                  <Sparkles className="h-4 w-4" />
-                </div>
-              )}
-              <div
-                className={
-                  m.role === "user"
-                    ? "max-w-[85%] rounded-2xl rounded-tr-sm bg-secondary px-4 py-3 text-sm"
-                    : "max-w-[88%] rounded-2xl rounded-tl-sm border border-border bg-background px-4 py-3 text-sm leading-relaxed"
-                }
+          <div className="flex-1 space-y-3 overflow-y-auto pr-1">
+            {filteredDoubts.length === 0 && (
+              <p className="px-1 text-xs text-muted-foreground">No {doubtFilter} doubts yet.</p>
+            )}
+            {filteredDoubts.map(d => (
+              <button
+                key={d.id}
+                onClick={() => openDoubt(d)}
+                className={`block w-full border-b border-border pb-3 text-left transition ${activeId === d.id ? "opacity-100" : "opacity-90 hover:opacity-100"}`}
               >
-                {m.image && (
-                  <img src={m.image} alt="Uploaded homework" className="mb-2 max-h-60 rounded-lg" />
-                )}
-                {m.role === "assistant" ? <MarkdownView text={m.content} /> : <span>{m.content}</span>}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="grid h-6 w-6 place-items-center rounded-md bg-primary/15 text-[10px] font-bold text-primary">
+                      {d.subject.slice(0, 2).toUpperCase()}
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wide">{d.subject}</span>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground">{fmtTime(d.createdAt)}</span>
+                </div>
+                <p className="mt-1.5 line-clamp-1 text-sm text-foreground/90">{d.title}</p>
+                <span
+                  role="button"
+                  onClick={(e) => { e.stopPropagation(); toggleResolved(d.id); }}
+                  className="mt-1 inline-block text-[11px] text-primary hover:underline"
+                >
+                  Mark as {d.status === "open" ? "resolved" : "open"}
+                </span>
+              </button>
+            ))}
+          </div>
+        </aside>
+
+        {/* Main panel */}
+        <section className="chat-sky relative flex flex-1 flex-col overflow-hidden rounded-3xl border border-border shadow-soft">
+          {/* Stars layer (light: subtle dots, dark: twinkling night sky) */}
+          <div className="chat-stars pointer-events-none absolute inset-0" />
+          <div className="chat-stars-twinkle pointer-events-none absolute inset-0" />
+          <div className="chat-shooting pointer-events-none absolute inset-0 hidden dark:block" />
+
+          {isEmpty ? (
+            <div className="relative z-10 flex flex-1 flex-col items-center px-4 pb-8 pt-8 md:pt-12">
+              <ClauseAvatar size={84} state="idle" />
+              <h1 className="mt-10 text-center text-3xl font-bold text-foreground md:text-4xl" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
+                How can Clause help you today?
+              </h1>
+              <p className="mt-2 text-center text-base text-muted-foreground">Clear your doubts instantly</p>
+
+              <div className="mt-10 w-full max-w-2xl">
+                <ChatInputCard
+                  input={input} setInput={setInput}
+                  imageData={imageData} setImageData={setImageData}
+                  loading={loading} listening={listening}
+                  style={style} setStyle={setStyle}
+                  send={send} toggleMic={toggleMic}
+                  onFile={onFile} fileInputRef={fileInputRef}
+                  grade={grade} subject={subject}
+                />
+              </div>
+
+              <div className="my-6 flex items-center gap-3 text-xs font-semibold tracking-wider text-muted-foreground">
+                <span>OR</span>
+              </div>
+
+              <button
+                onClick={() => setShowSearch(true)}
+                className="flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-foreground shadow-soft transition hover:shadow-elegant dark:bg-white/10 dark:text-foreground dark:backdrop-blur-sm"
+              >
+                <Search className="h-4 w-4" /> Search Module Questions
+              </button>
+
+              {/* Class / subject row */}
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+                <label className="flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 dark:bg-white/10">
+                  Class
+                  <select value={grade} onChange={e => setGrade(e.target.value)} className="bg-transparent font-semibold text-foreground focus:outline-none">
+                    {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+                  </select>
+                </label>
+                <label className="flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1.5 dark:bg-white/10">
+                  Subject
+                  <select value={subject} onChange={e => setSubject(e.target.value)} className="bg-transparent font-semibold text-foreground focus:outline-none">
+                    {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </label>
               </div>
             </div>
-          ))}
-
-          {loading && messages[messages.length - 1]?.role !== "assistant" && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Loader2 className="h-3.5 w-3.5 animate-spin" /> Tutor is thinking…
+          ) : (
+            <div className="relative z-10 flex flex-1 flex-col">
+              <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-4 md:p-6">
+                {messages.map((m, i) => (
+                  <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                    {m.role === "assistant" && (
+                      <div className="mr-2 mt-1 hidden shrink-0 sm:block">
+                        <ClauseAvatar size={40} state={loading && i === messages.length - 1 ? "answering" : "speaking"} />
+                      </div>
+                    )}
+                    <div className={m.role === "user"
+                      ? "max-w-[85%] rounded-2xl rounded-tr-sm bg-primary/15 px-4 py-3 text-sm text-foreground"
+                      : "max-w-[88%] rounded-2xl rounded-tl-sm border border-border bg-white/85 px-4 py-3 text-sm leading-relaxed text-foreground backdrop-blur-sm dark:border-white/10 dark:bg-white/5"}>
+                      {m.image && <img src={m.image} alt="Uploaded" className="mb-2 max-h-60 rounded-lg" />}
+                      {m.role === "assistant" ? <MarkdownView text={m.content} /> : <span>{m.content}</span>}
+                    </div>
+                  </div>
+                ))}
+                {loading && messages[messages.length - 1]?.role !== "assistant" && (
+                  <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                    <ClauseAvatar size={36} state="answering" />
+                    <span>Clause is answering…</span>
+                  </div>
+                )}
+                {error && (
+                  <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+                )}
+              </div>
+              <div className="border-t border-white/40 bg-white/40 p-3 backdrop-blur-sm dark:border-white/10 dark:bg-white/5 md:p-4">
+                <ChatInputCard
+                  input={input} setInput={setInput}
+                  imageData={imageData} setImageData={setImageData}
+                  loading={loading} listening={listening}
+                  style={style} setStyle={setStyle}
+                  send={send} toggleMic={toggleMic}
+                  onFile={onFile} fileInputRef={fileInputRef}
+                  grade={grade} subject={subject}
+                />
+              </div>
             </div>
           )}
-          {error && (
-            <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
-              {error}
-            </div>
-          )}
-        </div>
-
-        {/* Suggestions */}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {SUGGESTIONS.map(s => (
-            <button
-              key={s}
-              onClick={() => send(`${s} for Class ${grade} ${subject}.`)}
-              disabled={loading}
-              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:border-primary/40 hover:text-foreground disabled:opacity-50"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-
-        {/* Input */}
-        {imageData && (
-          <div className="mt-3 flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 p-2">
-            <img src={imageData} alt="preview" className="h-12 w-12 rounded-md object-cover" />
-            <span className="text-xs text-muted-foreground">Image attached — your tutor will analyze it.</span>
-            <button onClick={() => setImageData(null)} className="ml-auto rounded-full p-1 hover:bg-background" aria-label="Remove image">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-        )}
-        <form
-          onSubmit={e => { e.preventDefault(); send(input); }}
-          className="mt-3 flex items-end gap-2 rounded-2xl border border-border bg-card p-2 shadow-soft focus-within:border-primary/50"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={(e) => onFile(e.target.files?.[0])}
-            className="hidden"
-          />
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={loading}
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-input bg-background text-muted-foreground transition hover:text-foreground"
-            aria-label="Upload homework photo"
-            title="Upload homework photo"
-          >
-            <Camera className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={toggleMic}
-            disabled={loading}
-            className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-input transition ${listening ? "bg-destructive text-destructive-foreground animate-pulse" : "bg-background text-muted-foreground hover:text-foreground"}`}
-            aria-label={listening ? "Stop voice input" : "Start voice input"}
-            title="Voice input"
-          >
-            {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-          </button>
-          <textarea
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                send(input);
-              }
-            }}
-            placeholder={`Ask anything about Class ${grade} ${subject}…`}
-            rows={1}
-            className="max-h-40 flex-1 resize-none bg-transparent px-3 py-2 text-sm focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={loading || (!input.trim() && !imageData)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl gradient-primary text-primary-foreground shadow-soft transition disabled:opacity-50"
-            aria-label="Send"
-          >
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          </button>
-        </form>
-        <p className="mt-2 text-center text-[11px] text-muted-foreground">
-          EduAssist.AI may make mistakes. Always double-check important answers with your teacher or textbook.
-        </p>
+        </section>
       </main>
     </div>
   );
 }
 
-function EmptyState({ onPick }: { onPick: (s: string) => void }) {
-  const examples = [
-    "Explain Newton's second law with an example",
-    "Give me 5 MCQs on Quadratic Equations",
-    "Summarize the chapter on Nationalism in India",
-    "Help me write an essay on My Favourite Book",
-  ];
+function ChatInputCard(props: {
+  input: string; setInput: (s: string) => void;
+  imageData: string | null; setImageData: (s: string | null) => void;
+  loading: boolean; listening: boolean;
+  style: typeof STYLES[number]; setStyle: (s: typeof STYLES[number]) => void;
+  send: (t: string) => void; toggleMic: () => void;
+  onFile: (f: File | undefined) => void;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  grade: string; subject: string;
+}) {
+  const { input, setInput, imageData, setImageData, loading, listening, style, setStyle, send, toggleMic, onFile, fileInputRef, grade, subject } = props;
+  const [styleOpen, setStyleOpen] = useState(false);
   return (
-    <div className="flex h-full flex-col items-center justify-center py-10 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary shadow-elegant">
-        <Sparkles className="h-7 w-7 text-primary-foreground" />
-      </div>
-      <h2 className="mt-5 text-2xl font-bold" style={{ fontFamily: "Sora, Inter, sans-serif" }}>
-        Hi! I'm your <span className="text-gradient">EduAssist.AI</span> tutor
-      </h2>
-      <p className="mt-2 max-w-md text-sm text-muted-foreground">
-        Ask me anything from your CBSE syllabus — I'll explain it step-by-step at your level.
-      </p>
-      <div className="mt-6 grid w-full max-w-2xl gap-2 sm:grid-cols-2">
-        {examples.map(ex => (
-          <button
-            key={ex}
-            onClick={() => onPick(ex)}
-            className="rounded-2xl border border-border bg-card p-4 text-left text-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-soft"
-          >
-            {ex}
+    <form
+      onSubmit={e => { e.preventDefault(); send(input); }}
+      className="rounded-3xl bg-white p-4 shadow-elegant dark:border dark:border-white/10 dark:bg-white/5 dark:backdrop-blur-md"
+    >
+      {imageData && (
+        <div className="mb-3 flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 p-2">
+          <img src={imageData} alt="preview" className="h-12 w-12 rounded-md object-cover" />
+          <span className="text-xs text-muted-foreground">Image attached — Clause will analyze it.</span>
+          <button type="button" onClick={() => setImageData(null)} className="ml-auto rounded-full p-1 hover:bg-secondary" aria-label="Remove image">
+            <X className="h-4 w-4" />
           </button>
-        ))}
+        </div>
+      )}
+
+      <textarea
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
+        placeholder="Type your doubt…"
+        rows={2}
+        className="w-full resize-none bg-transparent px-1 py-1 text-base text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
+      />
+
+      <div className="mt-2 flex items-center gap-2">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={(e) => onFile(e.target.files?.[0])}
+          className="hidden"
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={loading}
+          className="grid h-10 w-10 place-items-center rounded-full text-foreground/70 hover:bg-secondary"
+          aria-label="Upload photo"
+          title="Upload photo"
+        >
+          <Camera className="h-5 w-5" />
+        </button>
+
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setStyleOpen(v => !v)}
+            className="flex items-center gap-1 rounded-xl border border-border px-3 py-2 text-sm font-medium"
+          >
+            {style} <ChevronDown className="h-4 w-4" />
+          </button>
+          {styleOpen && (
+            <div className="absolute left-0 top-full z-20 mt-1 w-40 overflow-hidden rounded-xl border border-border bg-card shadow-elegant">
+              {STYLES.map(s => (
+                <button
+                  type="button"
+                  key={s}
+                  onClick={() => { setStyle(s); setStyleOpen(false); }}
+                  className={`block w-full px-3 py-2 text-left text-sm hover:bg-secondary ${s === style ? "font-semibold text-primary" : ""}`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <span className="ml-2 hidden text-[11px] text-muted-foreground sm:inline">
+          Class {grade} · {subject}
+        </span>
+
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleMic}
+            disabled={loading}
+            className={`grid h-10 w-10 place-items-center rounded-full transition ${listening ? "bg-destructive text-destructive-foreground animate-pulse" : "text-foreground/70 hover:bg-secondary"}`}
+            aria-label={listening ? "Stop voice input" : "Start voice input"}
+          >
+            {listening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+          </button>
+          <button
+            type="submit"
+            disabled={loading || (!input.trim() && !imageData)}
+            className="grid h-10 w-10 place-items-center rounded-full bg-foreground/15 text-foreground transition hover:bg-foreground/25 disabled:opacity-50"
+            aria-label="Send"
+          >
+            {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }

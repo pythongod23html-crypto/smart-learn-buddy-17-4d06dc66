@@ -71,7 +71,7 @@ function Index() {
               Built for CBSE · Class 1 to Class 12
             </span>
             <h1
-              className="mt-6 text-4xl font-extrabold leading-[1.05] text-foreground sm:text-5xl md:text-6xl lg:text-7xl break-words"
+              className="mt-6 text-5xl font-extrabold leading-[1.05] text-foreground md:text-6xl lg:text-7xl"
               style={{ fontFamily: "Sora, Inter, sans-serif" }}
             >
               Your personal{" "}

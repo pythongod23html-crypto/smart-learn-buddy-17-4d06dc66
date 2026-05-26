@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import { AuthProvider, useAuth } from "@/hooks/use-auth";
+import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -126,40 +126,32 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (r) => r.location.pathname });
+
+  const PORTAL_ROUTES = [
+    "/chat", "/dashboard", "/quiz", "/flashcards", "/revision", "/planner",
+    "/settings", "/weekly-quiz", "/teacher", "/admin", "/parent",
+    "/parent-chat", "/parent-dashboard",
+  ];
+  const showSidebar = PORTAL_ROUTES.some(r => pathname === r || pathname.startsWith(r + "/"));
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <AppShell />
+          <SidebarProvider defaultOpen={false}>
+            <div className="flex min-h-screen w-full">
+              {showSidebar && <AppSidebar />}
+              <div className="relative flex-1">
+                {showSidebar && (
+                  <SidebarTrigger className="fixed left-2 top-2 z-50 rounded-md border border-border bg-background/80 backdrop-blur" />
+                )}
+                <Outlet />
+              </div>
+            </div>
+          </SidebarProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
-  );
-}
-
-function AppShell() {
-  const { session } = useAuth();
-  const path = useRouterState({ select: (r) => r.location.pathname });
-  const hideSidebar = !session || path === "/login" || path === "/admin-signup";
-
-  if (hideSidebar) {
-    return (
-      <div className="min-h-screen w-full">
-        <Outlet />
-      </div>
-    );
-  }
-
-  return (
-    <SidebarProvider defaultOpen={false}>
-      <div className="flex min-h-screen w-full">
-        <AppSidebar />
-        <div className="relative flex-1">
-          <SidebarTrigger className="fixed left-2 top-2 z-50 rounded-md border border-border bg-background/80 backdrop-blur" />
-          <Outlet />
-        </div>
-      </div>
-    </SidebarProvider>
   );
 }

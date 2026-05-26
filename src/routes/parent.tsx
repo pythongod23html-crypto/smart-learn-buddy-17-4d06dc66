@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Sparkles } from "lucide-react";
+import { Sparkles, NotebookPen } from "lucide-react";
 
 export const Route = createFileRoute("/parent")({ component: ParentPage });
 
@@ -14,6 +14,7 @@ function ParentPage() {
   const [report, setReport] = useState<string>("");
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState<string | null>(null);
+  const [hwMode, setHwMode] = useState(false);
 
   useEffect(() => {
     if (!loading && !session) navigate({ to: "/login" });
@@ -86,6 +87,31 @@ function ParentPage() {
           <h1 className="text-3xl font-bold tracking-tight">Welcome, parent</h1>
           <p className="text-sm text-muted-foreground">Track your child's learning and fee status.</p>
         </div>
+
+        {/* Homework Mode Toggle */}
+        <Card className="border-primary/30">
+          <CardHeader>
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary text-primary-foreground">
+                  <NotebookPen className="h-5 w-5" />
+                </div>
+                <div>
+                  <CardTitle>Homework Mode</CardTitle>
+                  <CardDescription>When ON, the AI tutor gives hints instead of full answers — so your child actually learns.</CardDescription>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setHwMode(h => !h)}
+                className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-semibold transition ${hwMode ? "border-primary/50 bg-primary/10 text-primary" : "border-input bg-card text-muted-foreground hover:text-foreground"}`}
+              >
+                <NotebookPen className="h-4 w-4" />
+                Homework mode {hwMode ? "ON" : "OFF"}
+              </button>
+            </div>
+          </CardHeader>
+        </Card>
 
         {!student ? (
           <Card>
