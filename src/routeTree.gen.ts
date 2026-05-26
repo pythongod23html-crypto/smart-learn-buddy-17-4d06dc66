@@ -19,6 +19,7 @@ import { Route as ParentDashboardRouteImport } from './routes/parent-dashboard'
 import { Route as ParentChatRouteImport } from './routes/parent-chat'
 import { Route as ParentRouteImport } from './routes/parent'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as HomeworkRouteImport } from './routes/homework'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ChatRouteImport } from './routes/chat'
@@ -80,6 +81,11 @@ const ParentRoute = ParentRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeworkRoute = HomeworkRouteImport.update({
+  id: '/homework',
+  path: '/homework',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlashcardsRoute = FlashcardsRouteImport.update({
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof ChatRoute
   '/dashboard': typeof DashboardRoute
   '/flashcards': typeof FlashcardsRoute
+  '/homework': typeof HomeworkRoute
   '/login': typeof LoginRoute
   '/parent': typeof ParentRoute
   '/parent-chat': typeof ParentChatRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/chat': typeof ChatRoute
   '/dashboard': typeof DashboardRoute
   '/flashcards': typeof FlashcardsRoute
+  '/homework': typeof HomeworkRoute
   '/login': typeof LoginRoute
   '/parent': typeof ParentRoute
   '/parent-chat': typeof ParentChatRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/chat': typeof ChatRoute
   '/dashboard': typeof DashboardRoute
   '/flashcards': typeof FlashcardsRoute
+  '/homework': typeof HomeworkRoute
   '/login': typeof LoginRoute
   '/parent': typeof ParentRoute
   '/parent-chat': typeof ParentChatRoute
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/dashboard'
     | '/flashcards'
+    | '/homework'
     | '/login'
     | '/parent'
     | '/parent-chat'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/dashboard'
     | '/flashcards'
+    | '/homework'
     | '/login'
     | '/parent'
     | '/parent-chat'
@@ -273,6 +284,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/dashboard'
     | '/flashcards'
+    | '/homework'
     | '/login'
     | '/parent'
     | '/parent-chat'
@@ -298,6 +310,7 @@ export interface RootRouteChildren {
   ChatRoute: typeof ChatRoute
   DashboardRoute: typeof DashboardRoute
   FlashcardsRoute: typeof FlashcardsRoute
+  HomeworkRoute: typeof HomeworkRoute
   LoginRoute: typeof LoginRoute
   ParentRoute: typeof ParentRoute
   ParentChatRoute: typeof ParentChatRoute
@@ -386,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/homework': {
+      id: '/homework'
+      path: '/homework'
+      fullPath: '/homework'
+      preLoaderRoute: typeof HomeworkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/flashcards': {
@@ -482,6 +502,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChatRoute: ChatRoute,
   DashboardRoute: DashboardRoute,
   FlashcardsRoute: FlashcardsRoute,
+  HomeworkRoute: HomeworkRoute,
   LoginRoute: LoginRoute,
   ParentRoute: ParentRoute,
   ParentChatRoute: ParentChatRoute,
