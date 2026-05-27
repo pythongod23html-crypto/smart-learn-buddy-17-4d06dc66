@@ -213,7 +213,7 @@ type StudentRowProps = {
     student_code: string;
     student_name: string;
     class_grade: string | null;
-    password_plain: string;
+    
     fee_amount_due: number;
     fee_status: string;
     fee_notes: string | null;
