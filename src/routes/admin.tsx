@@ -249,7 +249,7 @@ function StudentRow({ s, onDelete }: StudentRowProps) {
       <td className="py-2 pr-3 font-mono text-xs">{s.student_code}</td>
       <td className="py-2 pr-3">{s.student_name}</td>
       <td className="py-2 pr-3">{s.class_grade ?? "—"}</td>
-      <td className="py-2 pr-3 font-mono text-xs">{s.password_plain}</td>
+      
       {editing ? (
         <>
           <td className="py-2 pr-3"><Input value={fee} onChange={(e) => setFee(e.target.value)} className="h-8 w-24" /></td>
