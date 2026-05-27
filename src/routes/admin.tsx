@@ -192,7 +192,7 @@ function StudentsList() {
               <th className="py-2 pr-3">Code</th>
               <th className="py-2 pr-3">Name</th>
               <th className="py-2 pr-3">Grade</th>
-              <th className="py-2 pr-3">Password</th>
+              
               <th className="py-2 pr-3">Fee</th>
               <th className="py-2 pr-3">Status</th>
               <th className="py-2 pr-3">Actions</th>
