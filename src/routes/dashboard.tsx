@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SparkRemembers } from "@/components/SparkRemembers";
 import {
   Flame, Trophy, Clock3, Target, BookOpen, Calculator, FlaskConical,
   Brain, Languages, Globe2, ArrowRight, Sparkles, CalendarDays, MessageCircle,
@@ -201,6 +202,8 @@ function Dashboard() {
               </div>
               <p className="mt-2 text-xs text-muted-foreground">62% of revision plan complete</p>
             </div>
+
+            <SparkRemembers />
 
             <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
               <h3 className="text-sm font-semibold">Recent chats</h3>
