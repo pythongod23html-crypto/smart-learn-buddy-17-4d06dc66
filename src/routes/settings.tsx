@@ -17,6 +17,7 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   const { theme, toggle } = useTheme();
   const { session, role, signOut } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background">
       <Header />
