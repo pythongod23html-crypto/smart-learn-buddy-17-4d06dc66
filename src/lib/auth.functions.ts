@@ -196,18 +196,19 @@ export const getMyContext = createServerFn({ method: "GET" })
       student_code: string;
       student_name: string;
       class_grade: string | null;
-      fee_amount_due: number;
-      fee_status: string;
+      fee_amount_due: number | null;
+      fee_status: string | null;
       fee_notes: string | null;
     };
     let student: StudentInfo | null = null;
     if (role === "student") {
+      // Students must NOT see fee details — exclude fee columns.
       const { data } = await supabaseAdmin
         .from("students")
-        .select("id,student_code,student_name,class_grade,fee_amount_due,fee_status,fee_notes")
+        .select("id,student_code,student_name,class_grade")
         .eq("student_user_id", context.userId)
         .maybeSingle();
-      student = data;
+      student = data ? { ...data, fee_amount_due: null, fee_status: null, fee_notes: null } : null;
     } else if (role === "parent") {
       const { data } = await supabaseAdmin
         .from("students")
