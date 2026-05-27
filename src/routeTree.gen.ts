@@ -21,6 +21,7 @@ import { Route as ParentRouteImport } from './routes/parent'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as HomeworkRouteImport } from './routes/homework'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
+import { Route as ExamModeRouteImport } from './routes/exam-mode'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AdminSignupRouteImport } from './routes/admin-signup'
@@ -93,6 +94,11 @@ const FlashcardsRoute = FlashcardsRouteImport.update({
   path: '/flashcards',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExamModeRoute = ExamModeRouteImport.update({
+  id: '/exam-mode',
+  path: '/exam-mode',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/admin-signup': typeof AdminSignupRoute
   '/chat': typeof ChatRoute
   '/dashboard': typeof DashboardRoute
+  '/exam-mode': typeof ExamModeRoute
   '/flashcards': typeof FlashcardsRoute
   '/homework': typeof HomeworkRoute
   '/login': typeof LoginRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/admin-signup': typeof AdminSignupRoute
   '/chat': typeof ChatRoute
   '/dashboard': typeof DashboardRoute
+  '/exam-mode': typeof ExamModeRoute
   '/flashcards': typeof FlashcardsRoute
   '/homework': typeof HomeworkRoute
   '/login': typeof LoginRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/admin-signup': typeof AdminSignupRoute
   '/chat': typeof ChatRoute
   '/dashboard': typeof DashboardRoute
+  '/exam-mode': typeof ExamModeRoute
   '/flashcards': typeof FlashcardsRoute
   '/homework': typeof HomeworkRoute
   '/login': typeof LoginRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/admin-signup'
     | '/chat'
     | '/dashboard'
+    | '/exam-mode'
     | '/flashcards'
     | '/homework'
     | '/login'
@@ -258,6 +268,7 @@ export interface FileRouteTypes {
     | '/admin-signup'
     | '/chat'
     | '/dashboard'
+    | '/exam-mode'
     | '/flashcards'
     | '/homework'
     | '/login'
@@ -283,6 +294,7 @@ export interface FileRouteTypes {
     | '/admin-signup'
     | '/chat'
     | '/dashboard'
+    | '/exam-mode'
     | '/flashcards'
     | '/homework'
     | '/login'
@@ -309,6 +321,7 @@ export interface RootRouteChildren {
   AdminSignupRoute: typeof AdminSignupRoute
   ChatRoute: typeof ChatRoute
   DashboardRoute: typeof DashboardRoute
+  ExamModeRoute: typeof ExamModeRoute
   FlashcardsRoute: typeof FlashcardsRoute
   HomeworkRoute: typeof HomeworkRoute
   LoginRoute: typeof LoginRoute
@@ -415,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlashcardsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/exam-mode': {
+      id: '/exam-mode'
+      path: '/exam-mode'
+      fullPath: '/exam-mode'
+      preLoaderRoute: typeof ExamModeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -501,6 +521,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminSignupRoute: AdminSignupRoute,
   ChatRoute: ChatRoute,
   DashboardRoute: DashboardRoute,
+  ExamModeRoute: ExamModeRoute,
   FlashcardsRoute: FlashcardsRoute,
   HomeworkRoute: HomeworkRoute,
   LoginRoute: LoginRoute,

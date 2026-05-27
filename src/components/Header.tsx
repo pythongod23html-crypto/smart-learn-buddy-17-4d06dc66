@@ -19,6 +19,8 @@ const PORTAL_ROUTES = [
   "/parent",
   "/parent-chat",
   "/parent-dashboard",
+  "/homework",
+  "/exam-mode",
 ];
 
 export function Header() {

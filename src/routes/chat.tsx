@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { useEffect, useRef, useState } from "react";
-import { Send, Loader2, Camera, Mic, MicOff, X, Plus, Search, SlidersHorizontal, ChevronDown, AlertTriangle } from "lucide-react";
+import { Send, Loader2, Camera, Mic, MicOff, X, Plus, Search, SlidersHorizontal, ChevronDown, AlertTriangle, Brain } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -397,7 +397,15 @@ function ChatPage() {
                     )}
                     <div className={m.role === "user"
                       ? "max-w-[85%] rounded-2xl rounded-tr-sm bg-primary/15 px-4 py-3 text-sm text-foreground"
-                      : "max-w-[88%] rounded-2xl rounded-tl-sm border border-border bg-white/85 px-4 py-3 text-sm leading-relaxed text-foreground backdrop-blur-sm dark:border-white/10 dark:bg-white/5"}>
+                      : `relative max-w-[88%] rounded-2xl rounded-tl-sm border px-4 py-3 text-sm leading-relaxed text-foreground backdrop-blur-sm ${/i remember|remembered|last time|yesterday we|recall(ing)?/i.test(m.content) ? "border-primary/40 bg-gradient-to-br from-primary/10 to-accent/10 shadow-[0_0_24px_-8px_hsl(var(--primary)/0.5)] dark:border-primary/30" : "border-border bg-white/85 dark:border-white/10 dark:bg-white/5"}`}>
+                      {m.role === "assistant" && /i remember|remembered|last time|yesterday we|recall(ing)?/i.test(m.content) && (
+                        <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary">
+                          <span className="relative grid h-5 w-5 place-items-center rounded-full gradient-primary text-primary-foreground shadow-[0_0_12px_hsl(var(--primary)/0.6)]">
+                            <Brain className="h-3 w-3" />
+                          </span>
+                          Spark remembers
+                        </div>
+                      )}
                       {m.image && <img src={m.image} alt="Uploaded" className="mb-2 max-h-60 rounded-lg" />}
                       {m.role === "assistant" ? <MarkdownView text={m.content} /> : <span>{m.content}</span>}
                     </div>

@@ -14,6 +14,7 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { FocusModeProvider, FocusTimerWidget } from "@/components/FocusMode";
 
 function NotFoundComponent() {
   return (
@@ -139,17 +140,24 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <SidebarProvider defaultOpen={false}>
-            <div className="flex min-h-screen w-full">
-              {showSidebar && <AppSidebar />}
-              <div className="relative flex-1">
-                {showSidebar && (
-                  <SidebarTrigger className="fixed left-2 top-2 z-50 rounded-md border border-border bg-background/80 backdrop-blur" />
-                )}
-                <Outlet />
+          <FocusModeProvider>
+            <SidebarProvider defaultOpen={false}>
+              <div className="flex min-h-screen w-full">
+                {showSidebar && <AppSidebar />}
+                <div className="relative flex-1">
+                  {showSidebar && (
+                    <SidebarTrigger className="fixed left-2 top-2 z-50 rounded-md border border-border bg-background/80 backdrop-blur" />
+                  )}
+                  {showSidebar && (
+                    <div className="fixed right-3 top-3 z-50">
+                      <FocusTimerWidget />
+                    </div>
+                  )}
+                  <Outlet />
+                </div>
               </div>
-            </div>
-          </SidebarProvider>
+            </SidebarProvider>
+          </FocusModeProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
