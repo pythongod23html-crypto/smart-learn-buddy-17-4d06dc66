@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Header } from "@/components/Header";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/hooks/use-auth";
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   const { theme, toggle } = useTheme();
   const { session, role, signOut } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -49,7 +50,7 @@ function SettingsPage() {
               <p><span className="text-muted-foreground">Email:</span> <span className="font-semibold">{session.user.email}</span></p>
               <p><span className="text-muted-foreground">Role:</span> <span className="font-semibold capitalize">{role ?? "student"}</span></p>
               <button
-                onClick={signOut}
+                onClick={async () => { await signOut(); navigate({ to: "/" }); }}
                 className="mt-3 inline-flex items-center gap-2 rounded-full border border-destructive/40 px-4 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10"
               >
                 <LogOut className="h-3.5 w-3.5" /> Sign out
